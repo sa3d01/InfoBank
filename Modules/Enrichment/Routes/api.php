@@ -5,7 +5,6 @@ use Modules\Enrichment\Http\Controllers\EnrichmentController;
 
 Route::group([
     'prefix' => 'enrichment',
-//    'middleware'=>'api.third-party-auth'
 ], function () {
     Route::get('/slider', [EnrichmentController::class, 'slider']);
     Route::get('/index', [EnrichmentController::class, 'index']);

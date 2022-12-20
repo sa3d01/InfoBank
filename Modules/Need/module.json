@@ -1,0 +1,11 @@
+{
+    "name": "Need",
+    "alias": "need",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Need\\Providers\\NeedServiceProvider"
+    ],
+    "files": []
+}

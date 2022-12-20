@@ -1,0 +1,11 @@
+{
+    "name": "Enrichment",
+    "alias": "enrichment",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Enrichment\\Providers\\EnrichmentServiceProvider"
+    ],
+    "files": []
+}

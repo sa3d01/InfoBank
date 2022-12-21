@@ -32,22 +32,26 @@ class Admin extends Authenticatable implements HasMedia
 
     protected function getAvatarAttribute()
     {
-        $file = $this->getMedia("admins")->first();
+        $file = $this->getMedia("Admin")->first();
         if ($file) {
-            return $this->getMedia("admins")->first()->getFullUrl('thumb');
+            return url("media/" . $file->id . "/" . $file->file_name);
         }
-        return asset('images/users/user.jpg');
+        return asset('images/logo.png');
     }
 
+    /**
+     * @throws \Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist
+     * @throws \Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig
+     */
     protected function setAvatarAttribute($image)
     {
-        $this->clearMediaCollection("admins");
+        $this->clearMediaCollection("Admin");
         $fileName = time() . Str::random(10);
         $fileNameWithExt = time() . Str::random(10) . '.' . $image->getClientOriginalExtension();
         $this->addMedia($image)
             ->usingFileName($fileNameWithExt)
             ->usingName($fileName)
-            ->toMediaCollection("admins");
+            ->toMediaCollection("Admin");
     }
 
     public function setPasswordAttribute($password)

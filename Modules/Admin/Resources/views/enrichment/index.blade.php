@@ -5,89 +5,62 @@
 @endsection
 @section('content')
     @component('admin::common-components.breadcrumb')
-        @slot('title') Brands  @endslot
+        @slot('title') الاثراءات  @endslot
         @slot('li_1') عرض الكل  @endslot
     @endcomponent
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <a href="{{route('admin.brand.create')}}">
-                        <button type="button" class="btn btn-block btn-sm btn-success waves-effect waves-light">Add </button>
+                    <a href="{{route('admin.enrichment.create')}}">
+                        <button type="button" class="btn btn-block btn-sm btn-success waves-effect waves-light">إضافة </button>
                     </a>
                     <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                         <tr>
-                            <th>Brand Name</th>
-                            <th>Order qty(app)</th>
-                            <th>Order qty(brand)</th>
-                            <th>Total</th>
-                            <th>Start Contract Date</th>
-                            <th>Evaluation Order</th>
-                            <th>Evaluation Employee</th>
-                            <th>Owner</th>
-                            <th>Mobile</th>
-                            <th>Active</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
+                            <th>العنوان</th>
+                            <th>الوصف</th>
+                            <th>الرابط</th>
+                            <th>مفعل</th>
+                            <th>تعديل</th>
+                            <th>حذف</th>
                         </tr>
                         </thead>
 
                         <tbody>
                         @foreach($rows as $row)
                             <tr>
-                                <td>{{$row->title_ar}}</td>
-                                <td>{{\App\Models\Order::where(['brand_id'=>$row->id,'created_by'=>'client'])->count()}}</td>
-                                <td>{{\App\Models\Order::where(['brand_id'=>$row->id,'created_by'=>'brand'])->count()}}</td>
-                                <td>{{\App\Models\Order::where(['brand_id'=>$row->id])->count()}}</td>
-                                <td>{{$row->start_contract}}</td>
+                                <td>{{$row->title}}</td>
+                                <td>{{$row->description}}</td>
                                 <td>
-                                    @php
-                                    $order_ids=\App\Models\Order::where('brand_id',$row->id)->pluck('id')->toArray();
-                                    @endphp
-                                    @if(\App\Models\Rate::whereIn('order_id',$order_ids)->count('rate')>0)
-                                        {{\App\Models\Rate::whereIn('order_id',$order_ids)->sum('rate') / \App\Models\Rate::whereIn('order_id',$order_ids)->count('rate')}} /5
-                                    @else
-                                        0/5
-                                    @endif
+                                    @php(preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user|shorts)\/))([^\?&\"'>]+)/", $row->media_link, $matches))
+                                    <iframe src="https://www.youtube.com/embed/{{$matches[1]}}" height="200" width="300" title="{{$row->title}}"></iframe>
                                 </td>
-                                <td>
-                                    @php
-                                        $employee_ids=\App\Models\BrandEmployee::where('brand_id',$row->id)->pluck('id')->toArray();
-                                    @endphp
-                                    @if(\App\Models\Rate::whereIn('brand_employee_id',$employee_ids)->count('rate')>0)
-                                        {{\App\Models\Rate::whereIn('brand_employee_id',$employee_ids)->sum('rate') / \App\Models\Rate::whereIn('brand_employee_id',$employee_ids)->count('rate')}} /5
-                                    @else
-                                        0/5
-                                    @endif
-                                </td>
-                                <td>{{$row->owner->name}}</td>
-                                <td>{{$row->phone}}</td>
                                 <td>
                                     <div class="button-list">
                                         @if($row->banned==0)
-                                            <button data-id="{{$row->id}}" data-href="{{ route('admin.brand.ban',$row->id) }}" class="ban btn btn-danger waves-effect waves-light">
-                                                <i class="fa fa-archive mr-1"></i> <span>block</span>
+                                            <button data-id="{{$row->id}}" data-href="{{ route('admin.enrichment.ban',$row->id) }}" class="ban btn btn-danger waves-effect waves-light">
+                                                <i class="fa fa-archive mr-1"></i> <span>حظر</span>
                                             </button>
                                         @else
-                                            <button data-id="{{$row->id}}" data-href="{{ route('admin.brand.activate',$row->id) }}" class="activate btn btn-success waves-effect waves-light">
-                                                <i class="fa fa-user-clock mr-1"></i> <span>activate</span>
+                                            <button data-id="{{$row->id}}" data-href="{{ route('admin.enrichment.activate',$row->id) }}" class="activate btn btn-success waves-effect waves-light">
+                                                <i class="fa fa-user-clock mr-1"></i> <span>تفعيل</span>
                                             </button>
                                         @endif
                                     </div>
                                 </td>
                                 <td>
                                     <div class="button-list">
-                                        <a href="{{route('admin.brand.edit',$row->id)}}">
+                                        <a href="{{route('admin.enrichment.edit',$row->id)}}">
                                             <button class="btn btn-warning waves-effect waves-light">
-                                                <i class="fa fa-pen mr-1"></i> <span>Edit</span>
+                                                <i class="fa fa-pen mr-1"></i> <span>تعديل</span>
                                             </button>
                                         </a>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="button-list">
-                                        <form class="delete" data-id="{{$row->id}}" method="POST" action="{{ route('admin.brand.destroy',[$row->id]) }}">
+                                        <form class="delete" data-id="{{$row->id}}" method="POST" action="{{ route('admin.enrichment.destroy',[$row->id]) }}">
                                             @csrf
                                             {{ method_field('DELETE') }}
                                             <input type="hidden" value="{{$row->id}}">

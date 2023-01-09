@@ -35,41 +35,41 @@ class Enrichment extends Model implements HasMedia
 
     protected function getImageAttribute()
     {
-        $file = $this->getMedia("Enrichment")->first();
+        $file = $this->getMedia("EnrichmentImage")->first();
         if ($file) {
             return url("media/" . $file->id . "/" . $file->file_name);
         }
-        return asset('images/logo.png');
+        return "";
     }
 
     protected function setImageAttribute($image)
     {
-        $this->clearMediaCollection("Enrichment");
+        $this->clearMediaCollection("EnrichmentImage");
         $fileName = time() . Str::random(10);
         $fileNameWithExt = time() . Str::random(10) . '.' . $image->getClientOriginalExtension();
         $this->addMedia($image)
             ->usingFileName($fileNameWithExt)
             ->usingName($fileName)
-            ->toMediaCollection("Enrichment");
+            ->toMediaCollection("EnrichmentImage");
     }
 
     protected function getPdfAttribute()
     {
-        $file = $this->getMedia("Enrichment")->first();
+        $file = $this->getMedia("EnrichmentPdf")->first();
         if ($file) {
             return url("media/" . $file->id . "/" . $file->file_name);
         }
-        return asset('images/logo.png');
+        return "";
     }
 
     protected function setPdfAttribute($image)
     {
-        $this->clearMediaCollection("Enrichment");
+        $this->clearMediaCollection("EnrichmentPdf");
         $fileName = time() . Str::random(10);
         $fileNameWithExt = time() . Str::random(10) . '.' . $image->getClientOriginalExtension();
         $this->addMedia($image)
             ->usingFileName($fileNameWithExt)
             ->usingName($fileName)
-            ->toMediaCollection("Enrichment");
+            ->toMediaCollection("EnrichmentPdf");
     }
 }

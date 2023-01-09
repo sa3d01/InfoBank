@@ -35,7 +35,7 @@ class EnrichmentService
 
     public function showEnrichment($id): EnrichmentDto
     {
-        return new EnrichmentDto(Enrichment::find($id));
+        return new EnrichmentDto(Enrichment::findOrFail($id));
     }
 
 }

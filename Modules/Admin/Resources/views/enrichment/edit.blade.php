@@ -20,7 +20,7 @@
          @endforeach
      </div>
  @endif
- <form method="POST" action="{{route('admin.enrichment.update',$row->id)}}" data-parsley-validate novalidate>
+ <form method="POST" action="{{route('admin.enrichment.update',$row->id)}}" enctype="multipart/form-data" data-parsley-validate novalidate>
      @csrf
      @method('PUT')
         <div class="row">
@@ -43,18 +43,26 @@
                     </div>
                 </div>
             </div>
-{{--            <div class="col-lg-12">--}}
-{{--                <div class="card">--}}
-{{--                    <div class="card-body">--}}
-{{--                        <div class="form-group">--}}
-{{--                            <label for="image">image</label>--}}
-{{--                            <div class="card-box">--}}
-{{--                                <input name="image" id="input-file-now-custom-1 image" type="file" class="dropify" data-default-file="value="{{$row->image}}" />--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="image">الملفات التدعيمية - صورة</label>
+                            <div class="card-box">
+                                <input value="{{$row->image}}" name="image" id="input-file-now-custom-1 image" type="file" accept="image/*" class="dropify" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="image">الملفات التدعيمية - pdf</label>
+                            <div class="card-box">
+                                <input value="{{$row->pdf}}" name="pdf" id="input-file-now-custom-2" type="file"  accept="application/pdf" class="dropify" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="form-group">

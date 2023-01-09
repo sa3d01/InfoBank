@@ -11,7 +11,9 @@ class CreateEnrichmentRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'media_link' => 'required||url',
+            'media_link' => 'required|url',
+            'image' => 'nullable',
+            'pdf' => 'nullable',
         ];
     }
 

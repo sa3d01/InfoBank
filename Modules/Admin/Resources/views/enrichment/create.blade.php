@@ -5,7 +5,7 @@
 {{--    <link href="{{URL::asset('libs/bootstrap-datepicker/bootstrap-datepicker.min.css')}}" rel="stylesheet">--}}
     <link href="{{URL::asset('libs/bootstrap-colorpicker/bootstrap-colorpicker.min.css')}}" rel="stylesheet">
     <link href="{{URL::asset('libs/bootstrap-touchspin/bootstrap-touchspin.min.css')}}" rel="stylesheet" />
-{{--    <link href="{{asset('libs/dropify/dist/css/dropify.min.css')}}" rel="stylesheet" type="text/css" />--}}
+    <link href="{{asset('libs/dropify/dist/css/dropify.min.css')}}" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
  @component('admin::common-components.breadcrumb')
@@ -20,7 +20,7 @@
          @endforeach
      </div>
  @endif
- <form method="POST" action="{{route('admin.enrichment.store')}}"  data-parsley-validate novalidate>
+ <form method="POST" action="{{route('admin.enrichment.store')}}" enctype="multipart/form-data"  data-parsley-validate novalidate>
      @csrf
      @method('POST')
         <div class="row">
@@ -43,18 +43,26 @@
                     </div>
                 </div>
             </div>
-{{--            <div class="col-lg-12">--}}
-{{--                <div class="card">--}}
-{{--                    <div class="card-body">--}}
-{{--                        <div class="form-group">--}}
-{{--                            <label for="image">image</label>--}}
-{{--                            <div class="card-box">--}}
-{{--                                <input name="image" id="input-file-now-custom-1 image" type="file" class="dropify" />--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="image">الملفات التدعيمية - صورة</label>
+                            <div class="card-box">
+                                <input name="image" id="input-file-now-custom-1 image" type="file" accept="image/*" class="dropify" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="image">الملفات التدعيمية - pdf</label>
+                            <div class="card-box">
+                                <input name="pdf" id="input-file-now-custom-2" type="file"  accept="application/pdf" class="dropify" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="form-group">
@@ -80,43 +88,43 @@
 
 <script src="{{URL::asset('/js/pages/form-advanced.init.js')}}"></script>
 
-{{--<script src="{{asset('/libs/dropify/dist/js/dropify.min.js')}}"></script>--}}
+<script src="{{asset('/libs/dropify/dist/js/dropify.min.js')}}"></script>
 {{--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-datetimepicker/2.7.1/js/bootstrap-material-datetimepicker.js"></script>--}}
 {{--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-datetimepicker/2.7.1/js/bootstrap-material-datetimepicker.min.js"></script>--}}
-{{--<script>--}}
-{{--    $(document).ready(function() {--}}
-{{--        // Basic--}}
-{{--        $('.dropify').dropify();--}}
-{{--        // Translated--}}
-{{--        $('.dropify-fr').dropify({--}}
-{{--            messages: {--}}
-{{--                default: 'Glissez-déposez un fichier ici ou cliquez',--}}
-{{--                replace: 'Glissez-déposez un fichier ou cliquez pour remplacer',--}}
-{{--                remove: 'Supprimer',--}}
-{{--                error: 'Désolé, le fichier trop volumineux'--}}
-{{--            }--}}
-{{--        });--}}
-{{--        // Used events--}}
-{{--        var drEvent = $('#input-file-events').dropify();--}}
-{{--        drEvent.on('dropify.beforeClear', function(event, element) {--}}
-{{--            return confirm("Do you really want to delete \"" + element.file.name + "\" ?");--}}
-{{--        });--}}
-{{--        drEvent.on('dropify.afterClear', function(event, element) {--}}
-{{--            alert('File deleted');--}}
-{{--        });--}}
-{{--        drEvent.on('dropify.errors', function(event, element) {--}}
-{{--            console.log('Has Errors');--}}
-{{--        });--}}
-{{--        var drDestroy = $('#input-file-to-destroy').dropify();--}}
-{{--        drDestroy = drDestroy.data('dropify')--}}
-{{--        $('#toggleDropify').on('click', function(e) {--}}
-{{--            e.preventDefault();--}}
-{{--            if (drDestroy.isDropified()) {--}}
-{{--                drDestroy.destroy();--}}
-{{--            } else {--}}
-{{--                drDestroy.init();--}}
-{{--            }--}}
-{{--        })--}}
-{{--    });--}}
-{{--</script>--}}
+<script>
+    $(document).ready(function() {
+        // Basic
+        $('.dropify').dropify();
+        // Translated
+        $('.dropify-fr').dropify({
+            messages: {
+                default: 'Glissez-déposez un fichier ici ou cliquez',
+                replace: 'Glissez-déposez un fichier ou cliquez pour remplacer',
+                remove: 'Supprimer',
+                error: 'Désolé, le fichier trop volumineux'
+            }
+        });
+        // Used events
+        var drEvent = $('#input-file-events').dropify();
+        drEvent.on('dropify.beforeClear', function(event, element) {
+            return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
+        });
+        drEvent.on('dropify.afterClear', function(event, element) {
+            alert('File deleted');
+        });
+        drEvent.on('dropify.errors', function(event, element) {
+            console.log('Has Errors');
+        });
+        var drDestroy = $('#input-file-to-destroy').dropify();
+        drDestroy = drDestroy.data('dropify')
+        $('#toggleDropify').on('click', function(e) {
+            e.preventDefault();
+            if (drDestroy.isDropified()) {
+                drDestroy.destroy();
+            } else {
+                drDestroy.init();
+            }
+        })
+    });
+</script>
 @endsection

@@ -19,6 +19,7 @@ class Slider extends Model implements HasMedia
         'title',
         'description',
         'banned',
+//        'link',//optional
         'image'
     ];
 

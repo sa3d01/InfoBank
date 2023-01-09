@@ -21,6 +21,8 @@
                             <th>العنوان</th>
                             <th>الوصف</th>
                             <th>الرابط</th>
+                            <th>image</th>
+                            <th>pdf</th>
                             <th>مفعل</th>
                             <th>تعديل</th>
                             <th>حذف</th>
@@ -36,6 +38,21 @@
                                     @php(preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user|shorts)\/))([^\?&\"'>]+)/", $row->media_link, $matches))
                                     <iframe src="https://www.youtube.com/embed/{{$matches[1]}}" height="200" width="300" title="{{$row->title}}"></iframe>
                                 </td>
+                                <td data-toggle="modal" data-target="#imgModal{{$row->id}}">
+                                    @if($row->image!="")
+                                        <img style="border-radius: 10px;" width="200px" height="200px" class="img_preview" src="{{$row->image}}">
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($row->pdf!="")
+                                        <iframe src="{{$row->pdf}}" style="width:200px; height:200px;" frameborder="0"></iframe>
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+
                                 <td>
                                     <div class="button-list">
                                         @if($row->banned==0)

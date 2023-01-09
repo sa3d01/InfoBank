@@ -13,7 +13,7 @@ class IndexEnrichmentDto extends JsonResource
         return [
             'id' => (int)$this['id'],
             'title' => $this->title ?? "",
-            'description' => substr($this->description, 0, 70),
+            'description' => $this['description'],
             'media_link' => $this->media_link ?? "",
             'created_at' => $dt?$dt->format('d/m/Y h:i a'):"",
         ];

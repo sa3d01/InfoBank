@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class Attachment extends Model implements HasMedia
 {
@@ -41,10 +43,13 @@ class Attachment extends Model implements HasMedia
         $this->clearMediaCollection("Attachment");
         $fileName = time() . Str::random(10);
         $fileNameWithExt = time() . Str::random(10) . '.' . $image->getClientOriginalExtension();
-        $this->addMedia($image)
-            ->usingFileName($fileNameWithExt)
-            ->usingName($fileName)
-            ->toMediaCollection("Attachment");
+        try {
+            $this->addMedia($image)
+                ->usingFileName($fileNameWithExt)
+                ->usingName($fileName)
+                ->toMediaCollection("Attachment");
+        } catch (FileDoesNotExist | FileIsTooBig $e) {
+        }
     }
 
 }

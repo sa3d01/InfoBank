@@ -24,6 +24,11 @@ return new class extends Migration {
             //offline
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
+            $table->string('location_title')->nullable();
+            $table->string('location_type')->nullable();
+            $table->string('location')->nullable();
+
+            $table->boolean('banned')->nullable()->default(false);
             $table->timestamps();
         });
     }

@@ -71,6 +71,21 @@
                         </li>
                     </ul>
                 </li>
+                <li class="menu-title">قسم الدورات</li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="mdi mdi-movie-filter"></i>
+                        <span>قسم الدورات</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li>
+                            <a href="{{route('admin.course.index')}}">المحتوي</a>
+                        </li>
+                       <li>
+                            <a href="{{route('admin.course.create')}}">إضافة</a>
+                        </li>
+                    </ul>
+                </li>
 
 
 

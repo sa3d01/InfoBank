@@ -1,5 +1,6 @@
 {
     "Enrichment": true,
     "Need": true,
-    "Admin": true
+    "Admin": true,
+    "Course": true
 }

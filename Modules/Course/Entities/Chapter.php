@@ -15,5 +15,12 @@ class Chapter extends Model
         'title'
     ];
 
+    public function sessions()
+    {
+        return $this->hasMany(Session::class, 'chapter_id', 'id');
+    }
+    public function course(){
+        return $this->belongsTo(Course::class, 'course_id');
+    }
 
 }

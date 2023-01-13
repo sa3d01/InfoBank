@@ -5,33 +5,24 @@
 @endsection
 @section('content')
     @component('admin::common-components.breadcrumb')
-        @slot('title') الدورات  @endslot
+        @slot('title') الحصص  @endslot
         @slot('li_1') عرض الكل  @endslot
     @endcomponent
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <a href="{{route('admin.course.create')}}">
+                    <a href="{{route('admin.session.insert',$course->id)}}">
                         <button type="button" class="btn btn-block btn-sm btn-success waves-effect waves-light">إضافة </button>
                     </a>
                     <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                         <tr>
+                            <th>عنوان المحاضرة</th>
+                            <th>عنوان الباب</th>
                             <th>اسم الدورة</th>
-                            <th>نوع الدورة</th>
-                            <th>عدد الأبواب</th>
-                            <th>عدد الحصص</th>
-                            <th> الملفات التدعيمية</th>
-                            <th>عدد المشتركين</th>
-                            <th>مدة الدورة</th>
-                            <th>الشركة المقدمة</th>
-                            <th>لوجو الشركة المقدمة</th>
-                            <th>فئة المستفيدين</th>
-                            <th>اخر تحديث</th>
-                            <th>تاريخ الاضافة</th>
-                            <th>image</th>
-                            <th>مفعل</th>
+                            <th>مدة المحاضرة </th>
+                            <th>تاريخ الانشاء</th>
                             <th>تعديل</th>
                             <th>حذف</th>
                         </tr>
@@ -41,46 +32,13 @@
                         @foreach($rows as $row)
                             <tr>
                                 <td>{{$row->title}}</td>
-                                <td>{{$row->type=='online'?'اونلاين':'حضورية'}}</td>
-                                <td>{!! $row->chapterLabel()!!}</td>
-                                <td>{!! $row->sessionLabel()!!}</td>
-                                <td>{!! $row->attachmentLabel()!!}</td>
-                                <td>{{$row->subscribes->count()}}</td>
-                                <td>{{$row->sessions->sum('duration') ." دقيقة "}}</td>
-                                <td>{{$row->company_name}}</td>
-                                <td>
-                                    @if($row->company_logo!="")
-                                        <img style="border-radius: 10px;" width="200px" height="200px" class="img_preview" src="{{$row->company_logo}}">
-                                    @else
-                                        -
-                                    @endif
-                                </td>
-                                <td>{{$row->for=='managers'?'المدراء':'الموظفين'}}</td>
-                                <td>{{$row->updated_at}}</td>
+                                <td>{{$row->chapter->title}}</td>
+                                <td>{{$row->chapter->course->title}}</td>
+                                <td>{{$row->duration ." دقيقة "}}</td>
                                 <td>{{$row->created_at}}</td>
-                                <td data-toggle="modal" data-target="#imgModal{{$row->id}}">
-                                    @if($row->cover!="")
-                                        <img style="border-radius: 10px;" width="200px" height="200px" class="img_preview" src="{{$row->cover}}">
-                                    @else
-                                        -
-                                    @endif
-                                </td>
                                 <td>
                                     <div class="button-list">
-                                        @if($row->banned==0)
-                                            <button data-id="{{$row->id}}" data-href="{{ route('admin.course.ban',$row->id) }}" class="ban btn btn-danger waves-effect waves-light">
-                                                <i class="fa fa-archive mr-1"></i> <span>حظر</span>
-                                            </button>
-                                        @else
-                                            <button data-id="{{$row->id}}" data-href="{{ route('admin.course.activate',$row->id) }}" class="activate btn btn-success waves-effect waves-light">
-                                                <i class="fa fa-user-clock mr-1"></i> <span>تفعيل</span>
-                                            </button>
-                                        @endif
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="button-list">
-                                        <a href="{{route('admin.course.edit',$row->id)}}">
+                                        <a href="{{route('admin.session.edit',$row->id)}}">
                                             <button class="btn btn-warning waves-effect waves-light">
                                                 <i class="fa fa-pen mr-1"></i> <span>تعديل</span>
                                             </button>
@@ -89,7 +47,7 @@
                                 </td>
                                 <td>
                                     <div class="button-list">
-                                        <form class="delete" data-id="{{$row->id}}" method="POST" action="{{ route('admin.course.destroy',[$row->id]) }}">
+                                        <form class="delete" data-id="{{$row->id}}" method="POST" action="{{ route('admin.session.destroy',[$row->id]) }}">
                                             @csrf
                                             {{ method_field('DELETE') }}
                                             <input type="hidden" value="{{$row->id}}">

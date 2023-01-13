@@ -22,5 +22,7 @@ class Session extends Model
     {
         return $this->belongsTo(Chapter::class, 'chapter_id', 'id');
     }
-
+    public function course(){
+        return $this->belongsTo(Course::class, 'course_id');
+    }
 }

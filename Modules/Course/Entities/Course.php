@@ -109,6 +109,7 @@ class Course extends Model implements HasMedia
 
     public function rate()
     {
+
         $raters = Comment::where('course_id', $this->id)->count();
         $rates = Comment::where('course_id', $this->id)->sum('rate');
         if ($raters > 0) {
@@ -117,7 +118,32 @@ class Course extends Model implements HasMedia
             $response['rate'] = 0;
         }
         $response['raters'] = $raters;
-        return $response;
+        return [
+            'total'=>$response,
+            'five'=>$this->specificRate(5),
+            'foure'=>$this->specificRate(4),
+            'three'=>$this->specificRate(3),
+            'two'=>$this->specificRate(2),
+            'one'=>$this->specificRate(1),
+        ];
+    }
+    public function specificRate($rate)
+    {
+        $raters_count = Comment::where('course_id', $this->id)->count();
+        $specific_raters_count = Comment::where(['course_id'=> $this->id,'rate'=>$rate])->count();
+        if($raters_count==0){
+            return 0;
+        }
+        return $specific_raters_count/$raters_count*100;
+    }
+    public function getSubscribedClientProgress($client_id){
+        $course_sessions_count=$this->sessions->count();
+        if($course_sessions_count==0){
+            return 0;
+        }
+        $course_sessions_ids=$this->sessions->pluck('id');
+        $client_watched=ClientSession::whereIn('session_id',$course_sessions_ids)->where('client_id',$client_id)->count();
+        return $client_watched/$course_sessions_count*100;
     }
 
     public function sessions()
@@ -132,6 +158,10 @@ class Course extends Model implements HasMedia
     public function chapters()
     {
         return $this->hasMany(Chapter::class, 'course_id', 'id');
+    }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'course_id', 'id');
     }
 
     public function subscribes()

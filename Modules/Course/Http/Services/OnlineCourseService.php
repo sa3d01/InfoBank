@@ -8,10 +8,9 @@ use Exception;
 use Modules\Course\Entities\Comment;
 use Modules\Course\Entities\Course;
 use Modules\Course\Entities\Subscribe;
-use Modules\Course\Transformers\CommentOfflineCourseCollectionDto;
-use Modules\Course\Transformers\OfflineCourseCollectionDto;
-use Modules\Course\Transformers\OfflineCourseShowDto;
+use Modules\Course\Transformers\Online\CommentOnlineCourseCollectionDto;
 use Modules\Course\Transformers\Online\OnlineCourseCollectionDto;
+use Modules\Course\Transformers\Online\OnlineCourseShowDto;
 
 class OnlineCourseService
 {
@@ -42,34 +41,34 @@ class OnlineCourseService
         $data->client_id=$client_id;
         return new OnlineCourseCollectionDto($data);
     }
-    // public function showOfflineCourse($course_id)
-    // {
-    //     $course=Course::find($course_id);
-    //     return new OfflineCourseShowDto($course);
-    // }
+    public function showOnlineCourse($course_id)
+    {
+        $course=Course::find($course_id);
+        return new OnlineCourseShowDto($course);
+    }
 
-    // public function subscribeOfflineCourse($course_id)
-    // {
-    //     $course=Course::find($course_id);
-    //     $client=$this->getUserIdByToken(request()->header("Authorization"));
-    //     $old_subscription=Subscribe::where([
-    //         'client_id'=>$client['profile_client']['id'],
-    //         'course_id'=>$course_id
-    //     ])->first();
-    //     if($old_subscription){
-    //         $this->errorResponse("already subscribed");
-    //     }
-    //     Subscribe::create([
-    //         'client_id'=>$client['profile_client']['id'],
-    //         'course_id'=>$course_id
-    //     ]);
-    //     return new OfflineCourseShowDto($course);
-    // }
+    public function subscribeOnlineCourse($course_id)
+    {
+        $client=$this->getUserIdByToken(request()->header("Authorization"));
+        $old_subscription=Subscribe::where([
+            'client_id'=>$client['profile_client']['id'],
+            'course_id'=>$course_id
+        ])->first();
+        if($old_subscription){
+            $this->errorResponse("already subscribed");
+        }
+        Subscribe::create([
+            'client_id'=>$client['profile_client']['id'],
+            'course_id'=>$course_id,
+            'status'=>'in_progress'
+        ]);
+        return $this->successResponse();
+    }
 
-    // public function commentOfflineCourse($course_id)
-    // {
-    //     $course=Course::find($course_id);
-    //     return new CommentOfflineCourseCollectionDto(Comment::where('course_id',$course->id)->latest()->paginate());
-    // }
+    public function commentOnlineCourse($course_id)
+    {
+        $course=Course::find($course_id);
+        return new CommentOnlineCourseCollectionDto(Comment::where('course_id',$course->id)->latest()->paginate());
+    }
 
 }

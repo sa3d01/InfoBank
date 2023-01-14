@@ -53,7 +53,7 @@ class OfflineCourseService
             'client_id'=>$client['profile_client']['id'],
             'course_id'=>$course_id
         ]);
-        return new OfflineCourseShowDto($course);
+        return $this->successResponse();
     }
 
     public function commentOfflineCourse($course_id)

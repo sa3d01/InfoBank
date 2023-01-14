@@ -19,18 +19,18 @@ class OnlineCourseController extends BaseApiController
     {
         return $this->courseService->listOnlineCourses($request);
     }
-    // function showOnlineCourse($course_id)
-    // {
-    //     return $this->courseService->showOnlineCourse($course_id);
-    // }
-    // function subscribeOnlineCourse($course_id)
-    // {
-    //     return $this->courseService->subscribeOnlineCourse($course_id);
-    // }
-    // function commentOnlineCourse($course_id)
-    // {
-    //     return $this->courseService->commentOnlineCourse($course_id);
-    // }
+    function showOnlineCourse($course_id)
+    {
+        return $this->courseService->showOnlineCourse($course_id);
+    }
+    function subscribeOnlineCourse($course_id)
+    {
+        return $this->courseService->subscribeOnlineCourse($course_id);
+    }
+    function commentOnlineCourse($course_id)
+    {
+        return $this->courseService->commentOnlineCourse($course_id);
+    }
 
 
 }

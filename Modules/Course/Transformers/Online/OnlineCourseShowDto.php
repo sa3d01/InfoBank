@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Course\Transformers;
+namespace Modules\Course\Transformers\Online;
 
 use App\Traits\ClientRequestTrait;
 use Carbon\Carbon;
@@ -8,7 +8,7 @@ use Exception;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Course\Entities\Subscribe;
 
-class OfflineCourseShowDto extends JsonResource
+class OnlineCourseShowDto extends JsonResource
 {
     use ClientRequestTrait;
 
@@ -17,11 +17,18 @@ class OfflineCourseShowDto extends JsonResource
         $dt = Carbon::parse($this->created_at);
         $subscribed=false;
         $subscribed_status="not_subscribed";
+        $watching_progress=0;
         try{
             $client=$this->getUserIdByToken(request()->header("Authorization"));
             $subscribe=Subscribe::where(['client_id'=>$client['profile_client']['id'],'course_id'=>$this->id])->first();
             if($subscribe){
                 $subscribed=true;
+                $watching_progress=$this->getSubscribedClientProgress($client['profile_client']['id']);
+                if($watching_progress!=100 && $subscribe->status=='completed'){
+                    $subscribe->update(['status'=>'in_progress']);
+                }elseif($watching_progress==100 && $subscribe->status!='completed'){
+                    $subscribe->update(['status'=>'completed']);
+                }
                 $subscribed_status=$subscribe->status;
             }
         }catch(Exception $e){
@@ -41,18 +48,17 @@ class OfflineCourseShowDto extends JsonResource
             'subscribes_count'=>$this->subscribes->count(),
 
             'features' => $this->features ?? "",
-            'location'=>[
-                'location_title'=>$this->location_title,
-                'location_type'=>$this->location_type,
-                'location'=>$this->location,
-            ],
+
 
             'company_name' => $this->company_name ?? "",
             'company_description' => $this->company_description ?? "",
             'company_logo' => $this->company_logo,
-            'chapters'=>ChapterOfflineCourseDto::collection($this->chapters),
+
+            'chapters'=>ChapterOnlineCourseDto::collection($this->chapters),
+
             'subscribed'=>$subscribed,
-            'subscribed_status'=>$subscribed_status
+            'subscribed_status'=>$subscribed_status,
+            'watching_progress'=>$watching_progress,
         ];
     }
 }

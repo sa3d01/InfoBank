@@ -43,10 +43,12 @@
                             <label class="control-label">الوصف</label>
                             <textarea required name="description" class="form-control"></textarea>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label">الرابط</label>
-                            <input type="url" class="form-control" name="media_link"   />
-                        </div>
+                        @if($course->type=='online')
+                            <div class="form-group">
+                                <label class="control-label">الرابط</label>
+                                <input type="url" class="form-control" name="media_link"   />
+                            </div>
+                        @endif
                         <div class="form-group">
                             <label class="control-label">المدة الزمنية</label>
                             <input type="number" class="form-control" name="duration"   />

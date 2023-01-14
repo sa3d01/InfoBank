@@ -21,7 +21,9 @@ Route::group([
         'prefix' => 'online'
     ],function(){
         Route::get('/', [OnlineCourseController::class, 'listOnlineCourses'])->middleware('api.third-party-auth');
-
+        Route::get('/{id}', [OnlineCourseController::class, 'showOnlineCourse']);
+        Route::post('/{id}/subscribe', [OnlineCourseController::class, 'subscribeOnlineCourse'])->middleware('api.third-party-auth');
+        Route::get('/{id}/comment', [OnlineCourseController::class, 'commentOnlineCourse']);
     });
 
 

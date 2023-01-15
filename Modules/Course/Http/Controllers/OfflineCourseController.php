@@ -32,5 +32,8 @@ class OfflineCourseController extends BaseApiController
         return $this->courseService->commentOfflineCourse($course_id);
     }
 
-
+    function listSubscribedOfflineCourses(Request $request)
+    {
+        return $this->courseService->listSubscribedOfflineCourses($request);
+    }
 }

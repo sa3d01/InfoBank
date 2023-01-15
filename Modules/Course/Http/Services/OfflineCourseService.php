@@ -62,4 +62,21 @@ class OfflineCourseService
         return new CommentOfflineCourseCollectionDto(Comment::where('course_id',$course->id)->latest()->paginate());
     }
 
+    public function listSubscribedOfflineCourses($request)
+    {
+        $client=$this->getUserIdByToken(request()->header("Authorization"));
+        $client_id = $client['profile_client']['id'];
+
+        $subscribed_courses_q=Subscribe::where('client_id',$client_id);
+        if($request->has('progress_status')){
+            $subscribed_courses_q=$subscribed_courses_q->where('status',$request['progress_status']);
+        }
+        $subscribed_courses_id=$subscribed_courses_q->pluck('course_id')->toArray();
+        $query = Course::whereIn('id',$subscribed_courses_id)->whereBanned(false)->whereType('offline');
+        $rows = $this->listCourses($query, $request);
+        $data=$rows->latest()->paginate();
+        $data->client_id=$client_id;
+        return new OfflineCourseCollectionDto($data);
+    }
+
 }

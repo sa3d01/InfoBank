@@ -15,6 +15,9 @@ class OnlineCourseController extends BaseApiController
         $this->courseService = new OnlineCourseService();
     }
 
+    function getStatisticsCourses(){
+        return $this->courseService->getStatisticsCourses();
+    }
     function listOnlineCourses(Request $request)
     {
         return $this->courseService->listOnlineCourses($request);
@@ -31,6 +34,9 @@ class OnlineCourseController extends BaseApiController
     {
         return $this->courseService->commentOnlineCourse($course_id);
     }
-
+    function listSubscribedOnlineCourses(Request $request)
+    {
+        return $this->courseService->listSubscribedOnlineCourses($request);
+    }
 
 }

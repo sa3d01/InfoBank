@@ -71,4 +71,36 @@ class OnlineCourseService
         return new CommentOnlineCourseCollectionDto(Comment::where('course_id',$course->id)->latest()->paginate());
     }
 
+    public function listSubscribedOnlineCourses($request)
+    {
+        $client=$this->getUserIdByToken(request()->header("Authorization"));
+        $client_id = $client['profile_client']['id'];
+
+        $subscribed_courses_q=Subscribe::where('client_id',$client_id);
+        if($request->has('progress_status')){
+            if($request['progress_status']=='completed'){
+                $subscribed_courses_q=$subscribed_courses_q->where('status','completed');
+            }elseif($request['progress_status']=='in_progress'){
+                $subscribed_courses_q=$subscribed_courses_q->where('status','in_progress');
+            }
+        }
+        $subscribed_courses_id=$subscribed_courses_q->pluck('course_id')->toArray();
+        $query = Course::whereIn('id',$subscribed_courses_id)->whereBanned(false)->whereType('online');
+        $rows = $this->listCourses($query, $request);
+        $data=$rows->latest()->paginate();
+        $data->client_id=$client_id;
+        return new OnlineCourseCollectionDto($data);
+    }
+
+    public function getStatisticsCourses(){
+        $online_courses=Course::where('type','online')->whereBanned(false)->count();
+        $offline_courses=Course::where('type','offline')->whereBanned(false)->count();
+        $subscriptions=Subscribe::count();
+        $res=[
+            'online_courses'=>$online_courses,
+            'offline_courses'=>$offline_courses,
+            'subscriptions'=>$subscriptions
+        ];
+        return $this->successResponse($res);
+    }
 }
